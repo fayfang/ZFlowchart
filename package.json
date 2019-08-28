@@ -1,0 +1,41 @@
+{
+  "name": "zflowchart",
+  "version": "0.0.1",
+  "description": "flowchart base on ZRender",
+  "main": "dist/ZFlowchart.js",
+  "license": "MIT",
+  "private": false,
+  "files": [
+    "src",
+    "dist"
+  ],
+  "keywords": [
+    "flowchart",
+    "ZRender",
+    "canvas",
+    "typeScript"
+  ],
+  "scripts": {
+    "prepublish": "node script/build.js",
+    "demo": "node script/demo.js",
+    "build": "node script/build.js",
+    "test": "mochify --timeout 150000"
+  },
+  "author": "FayFang",
+  "peerDependencies": {
+    "zrender": "^4.0.7"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mochify": "^6.2.0",
+    "ts-loader": "^6.0.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5",
+    "webpack": "^4.30.0",
+    "webpack-dev-server": "^3.3.1"
+  },
+  "dependencies": {
+    "zrender": "^4.0.7"
+  }
+}
