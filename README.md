@@ -1,4 +1,4 @@
-# IndexedDBP
+# zflowchart
 flowchart base on [ZRender](https://ecomfe.github.io/zrender-doc/public/).
 
 ``` node

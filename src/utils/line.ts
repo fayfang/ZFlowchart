@@ -169,10 +169,6 @@ function getObstructs(fromNode: DNode, toNode: DNode, nodeTable: any[][]) {
 
   return obstructs;
 }
-// 获取最优点规则
-// 出入点
-function getOptimalPoints() {
-}
 
 function getLIneStyle(fromNode: DNode, points: PositionXY[], lineItem: LineItem) {
   const fromRect: PositionXY[] = [
@@ -225,6 +221,7 @@ function getLIneStyle(fromNode: DNode, points: PositionXY[], lineItem: LineItem)
     text: lineItem.text,
     stroke: lineColor,
     textFill: lineColor,
+    color: lineColor,
     textPosition: position,
   };
 }

@@ -9,6 +9,7 @@ let compiler = webpack({
     filename: 'ZFlowchart.js',
     library: 'ZFlowchart',
     libraryTarget: 'umd',
+    libraryExport: "default",
     umdNamedDefine: true
   },
   resolve: {

@@ -47,6 +47,9 @@ export const drawLine = (points: PositionXY[], style?: any) => {
       n: 3,
       r: 5,
     },
+    style: {
+      fill: style.color,
+    },
   });
 
   // 先原点旋转，再移动
