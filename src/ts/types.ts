@@ -22,7 +22,7 @@ export interface DrawPos {
 
 export interface LineItem {
   lineNode: DNode;
-  lineTYpe: string;
+  lineType: string;
   text?: string;
 }
 
@@ -42,7 +42,7 @@ export interface DNode {
   $parent?: DNode | null;
   children: DNode[];
   // 连线
-  toLines?: LineItem[];
+  toLines: LineItem[];
   // 上右下左 连线次数
   lineCounts: number[];
 }

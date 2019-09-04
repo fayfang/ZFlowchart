@@ -146,14 +146,14 @@ function getObstructs(fromNode: DNode, toNode: DNode, nodeTable: any[][]) {
   });
 
   const topLst = middleNodes[0]
-                  .slice()
+                  .slice(1, middleNodes[0].length - 1)
                   .filter((item: any) => (!!item && item !== toNode && item !== fromNode));
   const rightList = middleNodes
                       .map((row: any[]) => row[row.length - 1])
                       .slice()
                       .filter((item: any) => (!!item && item !== toNode && item !== fromNode));
   const bottomList = middleNodes[middleNodes.length - 1]
-                      .slice()
+                      .slice(1, middleNodes[0].length - 1)
                       .filter((item: any) => (!!item && item !== toNode && item !== fromNode));
   const leftList = middleNodes
                       .map((row: any[]) => row[0])
@@ -201,18 +201,10 @@ function getLIneStyle(fromNode: DNode, points: PositionXY[], lineItem: LineItem)
   } else if (firstPoint[1] > lastPoint[1]) {
     position[1] = firstPoint[1] - lastPoint[1] - initStart;
   }
-  if (lineIndex % 2 === 0) {
-    if (position[1] === 0) {
-      position[1] += fromNode.lineCounts[lineIndex] * offset;
-    } else {
-      position[1] -= fromNode.lineCounts[lineIndex] * offset;
-    }
+  if (lineIndex === 0) {
+    position[1] -= fromNode.lineCounts[lineIndex] * offset;
   } else {
-    if (position[0] === 0) {
-      position[0] += fromNode.lineCounts[lineIndex] * offset;
-    } else {
-      position[0] -= fromNode.lineCounts[lineIndex] * offset;
-    }
+    position[1] += fromNode.lineCounts[lineIndex] * offset;
   }
 
   fromNode.lineCounts[lineIndex]++;

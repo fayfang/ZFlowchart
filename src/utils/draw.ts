@@ -26,6 +26,7 @@ export const drawLine = (points: PositionXY[], style?: any) => {
   const lboPoint = points[length - 2];
 
   const line = new zrender.Polyline({
+    cursor: 'default',
     style,
     shape: {
       points,
@@ -41,6 +42,7 @@ export const drawLine = (points: PositionXY[], style?: any) => {
   const angle = Math.atan2(out[1], out[0]) - (Math.PI / 6);
 
   const arrow = new zrender.Isogon({
+    cursor: 'default',
     shape: {
       x: 0,
       y: 0,
@@ -71,7 +73,7 @@ export const drawStatus = (text: string, color: string) => {
   const radius = Math.max(20, (rect.width + 10) / 2);
 
   const circle = new zrender.Circle({
-    draggable: true,
+    cursor: 'default',
     shape: {
       r: radius,
     },
@@ -88,29 +90,54 @@ export const drawStatus = (text: string, color: string) => {
 export const drawJudgment = (text: string) => {
   const rect = getTextRect(text);
 
-  const polygon = new zrender.Polygon({
+  const Polyline = new zrender.Polyline({
+    cursor: 'default',
     shape: {
       points: [
         [0, 0],
         [rect.width + 60, 0],
         [rect.width + 60, rect.height + 20],
         [0, rect.height + 20],
+        [0, 0],
       ],
     },
     style: {
       text,
-      fill: 'none',
       stroke: StatusColor.normal,
     },
   });
 
-  return polygon;
+  return Polyline;
+};
+
+export const drawSwitch = (text: string) => {
+  const rect = getTextRect(text);
+
+  const Polyline = new zrender.Polyline({
+    cursor: 'default',
+    shape: {
+      points: [
+        [0, 0],
+        [rect.width + 40, 0],
+        [rect.width + 40, rect.height + 10],
+        [0, rect.height + 10],
+        [0, 0],
+      ],
+    },
+    style: {
+      text,
+      stroke: StatusColor.normal,
+    },
+  });
+
+  return Polyline;
 };
 
 export const drawProcess = (text: string) => {
   const rect = getTextRect(text);
 
   const square = new zrender.Rect({
+    cursor: 'default',
     shape: {
       r: [5, 5, 5, 5],
       width: rect.width + 15,
@@ -129,6 +156,7 @@ export const drawProcess = (text: string) => {
 export default {
   drawLine,
   drawStatus,
+  drawSwitch,
   drawJudgment,
   drawProcess,
 };

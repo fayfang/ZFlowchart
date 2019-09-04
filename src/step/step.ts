@@ -39,6 +39,7 @@ export class Step {
       $vm: this,
       $parent: null,
       children: [],
+      toLines: [],
       lineCounts: [0, 0, 0, 0],
     };
     this.sdNode = node;
@@ -53,32 +54,36 @@ export class Step {
     }
     const levels = this.$zfc.nodeTable[node.level];
     levels.push(node);
-    // 计算列数
-    if ($parent) {
-      node.col = $parent.col + $parent.children.length;
-    }
-    node.weight = node.col;
 
     // 初始化子节点
     this.childrenInit(node.children, node);
 
-    // 设置权重
     if (node.children.length) {
       node.weight = node.children.reduce((value: number, item: DNode) => {
         return value += item.weight;
       }, 0);
+    } else {
+      node.weight = 1;
     }
-    // 根据权重重置col
-    const cpTree = levels.slice(0, levels.length - 1);
-    node.col = cpTree.reduce((value: number, cItem: DNode) => {
-      return value += cItem.weight;
-    }, node.col);
     // 最后重置 nodeTable 为一个n * m的矩阵
     if (!$parent) {
+      // 先根据权重重置col
+      function setCols(colNode: DNode, colNum: number) {
+        colNode.col = colNum;
+        let addNum: number = colNum;
+        colNode.children.forEach((ccolNode: DNode, ccIndex: number) => {
+          setCols(ccolNode, addNum);
+          addNum += ccolNode.weight;
+        });
+      }
+      setCols(node, 0);
+      // 生成n * m的矩阵
       const cpTable = this.$zfc.nodeTable.slice();
       this.$zfc.nodeTable = [];
       const rowLength = cpTable.length;
-      const collength = Math.max(...cpTable.map((item: any[]) => item.length));
+      const collength = Math.max(...cpTable.map((item: any[]) => {
+        return Math.max(...item.map((cItem: any) => cItem.col + 1));
+      }));
       this.$zfc.nodeTable = Array.from({length: rowLength}).map(() => Array.from({length: collength}));
 
       cpTable.forEach((level1: DNode[], index1: number) => {
@@ -145,7 +150,7 @@ export class StatusStep extends Step {
 
       parent.toLines = [{
         lineNode: cNode,
-        lineTYpe: 'main',
+        lineType: 'main',
       }];
     }
   }
@@ -165,6 +170,10 @@ export class JudgmentStep extends Step {
   constructor(type: string, vm: any, zfc: any) {
     super(type, vm, zfc);
   }
+  public setText(textList: string[]) {
+    this.trueText = textList[0];
+    this.falseText = textList[1];
+  }
   public logicTrue(trueVm: Step) {
     this.trueVm = trueVm;
   }
@@ -183,7 +192,7 @@ export class JudgmentStep extends Step {
 
       parent.toLines.push({
         lineNode: cNode,
-        lineTYpe: 'main',
+        lineType: 'main',
         text: this.trueText,
       });
     }
@@ -197,7 +206,7 @@ export class JudgmentStep extends Step {
 
       parent.toLines.push({
         lineNode: cNode,
-        lineTYpe: 'minor',
+        lineType: 'minor',
         text: this.falseText,
       });
     }
@@ -213,6 +222,7 @@ export class JudgmentStep extends Step {
       [x + width / 2, y],
       [x, y + height / 2],
       [x - width / 2, y],
+      [x, y - height / 2],
     ];
 
     this.zrVm.attr({
@@ -243,7 +253,7 @@ export class ProcessStep extends Step {
       }
 
       parent.toLines = [{
-        lineTYpe: 'main',
+        lineType: 'main',
         lineNode: cNode,
       }];
     }
@@ -257,6 +267,56 @@ export class ProcessStep extends Step {
         y,
       },
     });
+    this.$zfc.zr.add(this.zrVm);
+  }
+}
+
+export class SwitchStep extends Step {
+  private caseList: Step[] = [];
+  constructor(type: string, vm: any, zfc: any) {
+    super(type, vm, zfc);
+  }
+  public pushCase(sCase: Step) {
+    this.caseList.push(sCase);
+  }
+  public childrenInit(children: DNode[], parent: DNode) {
+    parent.toLines = [];
+    this.caseList.forEach((item: Step) => {
+      let cNode = item.chainInit(parent);
+      if (cNode) {
+        children.push(cNode);
+      } else {
+        cNode = item.sdNode;
+      }
+
+      parent.toLines.push({
+        lineNode: cNode,
+        lineType: 'main',
+      });
+    });
+  }
+  public draw(node: DNode) {
+    const x = node.levelX;
+    const y = node.levelY;
+    const width = node.vmRect.width;
+    const height = node.vmRect.height;
+
+    const points = [
+      [x - width / 2, y],
+      [x - width / 2 + 10, y - height / 2],
+      [x + width / 2 - 10, y - height / 2],
+      [x + width / 2, y],
+      [x + width / 2 - 10, y + height / 2],
+      [x - width / 2 + 10, y + height / 2],
+      [x - width / 2, y],
+    ];
+
+    this.zrVm.attr({
+      shape: {
+        points,
+      },
+    });
+
     this.$zfc.zr.add(this.zrVm);
   }
 }

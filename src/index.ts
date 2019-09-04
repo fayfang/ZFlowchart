@@ -2,7 +2,7 @@ import zrender from 'zrender';
 import draw from './utils/draw';
 import { StatusColor } from './vars/vars';
 import { Status } from './ts/types';
-import { StatusStep, JudgmentStep, ProcessStep, Step } from './step/step';
+import { StatusStep, JudgmentStep, ProcessStep, SwitchStep, Step } from './step/step';
 import { DNode } from './ts/types';
 import DrawLine from './utils/line';
 
@@ -20,13 +20,18 @@ export default class FlowChart {
     return element;
   }
   public judgment(text: string): JudgmentStep {
-    const polygon = draw.drawJudgment(text);
-    const element = new JudgmentStep('judgment', polygon, this);
+    const Polyline = draw.drawJudgment(text);
+    const element = new JudgmentStep('judgment', Polyline, this);
     return element;
   }
   public process(text: string): ProcessStep {
     const square = draw.drawProcess(text);
     const element = new ProcessStep('process', square, this);
+    return element;
+  }
+  public switch(text: string): SwitchStep {
+    const Polyline = draw.drawSwitch(text);
+    const element = new SwitchStep('switch', Polyline, this);
     return element;
   }
   public draw(step: Step) {
@@ -69,5 +74,6 @@ export default class FlowChart {
 
     // 画线
     DrawLine(nodeTable, this.zr);
+    console.log(nodeTable);
   }
 }
