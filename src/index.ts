@@ -68,12 +68,11 @@ export default class FlowChart {
       });
     }
 
-    node.levelX = (this.zr.getWidth() - node.levelWidth) / 2 - (node.levelWidth / 2);
+    node.levelX = 20 + (node.levelWidth / 2);
     node.levelY = node.levelHeight / 2;
     StartDraw(node);
 
     // 画线
     DrawLine(nodeTable, this.zr);
-    console.log(nodeTable);
   }
 }
