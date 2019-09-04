@@ -5,7 +5,7 @@ flowchart base on [ZRender](https://ecomfe.github.io/zrender-doc/public/).
   npm install zflowchart
 ```
 
-online [demo](https://jsfiddle.net/a1g0upnm/5/)
+online [demo](https://jsfiddle.net/3y6oqhge/)
 
 ## example
 ``` typeScript
